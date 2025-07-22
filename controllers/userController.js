@@ -54,6 +54,11 @@ export function loginUser(req,res){
             })
         }else{
             const isPasswordCorrect = bcrypt.compareSync(password, user.password)
+            
+            //check for user.isDisabled
+            //check for invalid attempts 
+            //if invalid attempts > 3 AND user.blockuntil > Data.now() res
+            
             if(isPasswordCorrect){
                
                 const userData ={
@@ -71,14 +76,19 @@ export function loginUser(req,res){
                 res.json({
                     message: "Login successful",
                     token: token,
+                    user: userData,
                 });
            
            
             }else{
                 res.json({
                     message : "Invalid Password"
-                })
+                });
+                //user -> blockUntil = Date.now() + 5*60*1000
+                //user -> inValidAttempts = default=0 +1
+                //if(user.inValidAttempts > 3){
+                //  user.isDisabled = true
             }
         }
-    })
+    });
 }
